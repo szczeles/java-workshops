@@ -1,17 +1,26 @@
 package pl.jeppesen.workshops.flights.model;
 
+import com.opencsv.bean.CsvBindByName;
+import com.opencsv.bean.CsvDate;
+
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 public class Flight {
     private String id;
     private LocalDate date;
     private String airline;
 
+    private String from;
+    private String to;
+
     private LocalDateTime std;
     private LocalDateTime sta;
 
     private String aircraftId;
+    private static ZoneId plZone = ZoneId.of("Europe/Warsaw");
 
     public Flight(String id, LocalDate date, String airline) {
         this.id = id;
@@ -71,15 +80,47 @@ public class Flight {
         this.aircraftId = aircraftId;
     }
 
+    public String getFrom() {
+        return from;
+    }
+
+    public void setFrom(String from) {
+        this.from = from;
+    }
+
+    public String getTo() {
+        return to;
+    }
+
+    public void setTo(String to) {
+        this.to = to;
+    }
+
     @Override
     public String toString() {
         return "Flight{" +
                 "id='" + id + '\'' +
                 ", date=" + date +
                 ", airline='" + airline + '\'' +
+                ", from='" + from + '\'' +
+                ", to='" + to + '\'' +
                 ", std=" + std +
                 ", sta=" + sta +
                 ", aircraftId='" + aircraftId + '\'' +
                 '}';
+    }
+
+    public void setDateFromString(String date) {
+        if (date != null) {
+            this.date = LocalDate.parse(date);
+        }
+    }
+
+    public void setStaFromTimestamp(int timestamp) {
+        sta = LocalDateTime.ofInstant(Instant.ofEpochSecond(Long.valueOf(timestamp)), plZone);
+    }
+
+    public void setStdFromTimestamp(int timestamp) {
+        std = LocalDateTime.ofInstant(Instant.ofEpochSecond(Long.valueOf(timestamp)), plZone);
     }
 }
