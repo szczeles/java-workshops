@@ -13,6 +13,16 @@ public class Flight {
 
     private String aircraftId;
 
+    public Flight(String id, LocalDate date, String airline) {
+        this.id = id;
+        this.date = date;
+        this.airline = airline;
+    }
+
+    public Flight() {
+
+    }
+
     public String getId() {
         return id;
     }
