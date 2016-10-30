@@ -1,0 +1,14 @@
+<etl>
+    <input>
+        <flightsCsv>
+            <path>data/flights.csv</path>
+            <path>data/flights.csv</path>
+        </flightsCsv>
+    </input>
+    <validation>
+        <dateRange>
+            <from>2015-10-01</from>
+            <to>2016-09-30</to>
+        </dateRange>
+    </validation>
+</etl>
