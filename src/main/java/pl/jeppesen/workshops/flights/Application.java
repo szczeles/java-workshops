@@ -17,6 +17,8 @@ public class Application {
 
         List<Flight> flights = flightDataProvider.getFlights();
         System.out.println(flights.size());
-        System.out.println(flights.stream().filter(flight -> flightValidator.isValid(flight)).count());
+        System.out.println(flights.stream()
+                .filter(flight -> flightValidator.isValid(flight))
+                .filter(flight -> flight.getDate().isBefore(LocalDate.of(2015, 11, 1))).count());
     }
 }
