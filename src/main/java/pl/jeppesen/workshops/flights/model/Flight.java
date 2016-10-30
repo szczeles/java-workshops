@@ -116,11 +116,15 @@ public class Flight {
         }
     }
 
-    public void setStaFromTimestamp(int timestamp) {
-        sta = LocalDateTime.ofInstant(Instant.ofEpochSecond(Long.valueOf(timestamp)), plZone);
+    public void setStaFromTimestamp(String timestamp) {
+        if (timestamp != null) {
+            sta = LocalDateTime.ofInstant(Instant.ofEpochSecond(Long.valueOf(timestamp)), plZone);
+        }
     }
 
-    public void setStdFromTimestamp(int timestamp) {
-        std = LocalDateTime.ofInstant(Instant.ofEpochSecond(Long.valueOf(timestamp)), plZone);
+    public void setStdFromTimestamp(String timestamp) {
+        if (timestamp != null) {
+            std = LocalDateTime.ofInstant(Instant.ofEpochSecond(Long.valueOf(timestamp)), plZone);
+        }
     }
 }
