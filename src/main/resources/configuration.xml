@@ -10,5 +10,22 @@
             <from>2015-10-01</from>
             <to>2016-09-30</to>
         </dateRange>
+        <airports>
+            <airport>BZG</airport>
+            <airport>GDN</airport>
+            <airport>KTW</airport>
+            <airport>KRK</airport>
+            <airport>LCJ</airport>
+            <airport>LUZ</airport>
+            <airport>SZY</airport>
+            <airport>POZ</airport>
+            <airport>RDO</airport>
+            <airport>RZE</airport>
+            <airport>SZZ</airport>
+            <airport>WAW</airport>
+            <airport>WMI</airport>
+            <airport>WRO</airport>
+            <airport>IEG</airport>
+        </airports>
     </validation>
 </etl>
