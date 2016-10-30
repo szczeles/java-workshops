@@ -7,6 +7,7 @@ import pl.jeppesen.workshops.flights.validator.ValidIdFlightValidator;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class Application {
     public static void main(String[] args) {
@@ -16,12 +17,6 @@ public class Application {
 
         List<Flight> flights = flightDataProvider.getFlights();
         System.out.println(flights.size());
-        int valid = 0;
-        for (Flight flight : flights) {
-            if (flightValidator.isValid(flight)) {
-                valid++;
-            }
-        }
-        System.out.println(valid);
+        System.out.println(flights.stream().filter(flight -> flightValidator.isValid(flight)).count());
     }
 }
