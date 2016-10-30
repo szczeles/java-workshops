@@ -26,12 +26,7 @@ public class OverallFlightValidatorTest {
     }
 
     private FlightValidator validator(boolean response) {
-        return new FlightValidator() {
-            @Override
-            public boolean isValid(Flight f) {
-                return response;
-            }
-        };
+        return (flight) -> response;
     }
 
 }

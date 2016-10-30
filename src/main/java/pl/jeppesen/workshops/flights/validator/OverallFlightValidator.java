@@ -13,11 +13,6 @@ public class OverallFlightValidator implements FlightValidator {
 
     @Override
     public boolean isValid(Flight f) {
-        for (FlightValidator validator : validators) {
-            if (!validator.isValid(f)) {
-                return false;
-            }
-        }
-        return true;
+        return validators.stream().map(validator -> !validator.isValid(f)).findFirst().isPresent();
     }
 }
