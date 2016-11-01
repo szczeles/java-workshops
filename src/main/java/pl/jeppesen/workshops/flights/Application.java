@@ -9,6 +9,8 @@ import pl.jeppesen.workshops.flights.validator.*;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Spliterators;
+import java.util.stream.StreamSupport;
 
 public class Application {
     public static void main(String[] args) {
@@ -22,10 +24,9 @@ public class Application {
 
         CsvFlightDataProvider flightDataProvider = new CsvFlightDataProvider(configuration.getFlightsCsvPath());
 
-        List<Flight> flights = flightDataProvider.getFlights();
-
-        System.out.println(flights.stream()
+        System.out.println(StreamSupport.stream(flightDataProvider.getFlightsIterator().spliterator(), false)
                 .filter(flight -> flightValidator.isValid(flight))
                 .count());
+        ;
     }
 }

@@ -1,10 +1,12 @@
 package pl.jeppesen.workshops.flights.dataprovider;
 
+import com.google.common.collect.Lists;
 import org.testng.annotations.Test;
 import pl.jeppesen.workshops.flights.model.Flight;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.testng.Assert.*;
@@ -28,5 +30,15 @@ public class CsvFlightDataProviderTest {
         assertEquals(flights.get(0).getAirline(), "4U");
         assertEquals(flights.get(0).getAircraftId(), "D-AKNR");
     }
+
+    @Test
+    public void shouldReadFileUsingIterator() {
+        String fileLocation = "src/test/resources/flights.csv";
+        CsvFlightDataProvider csvFlightDataProvider = new CsvFlightDataProvider(fileLocation);
+        Iterable<Flight> flightsIterator = csvFlightDataProvider.getFlightsIterator();
+        ArrayList<Flight> flights = Lists.newArrayList(flightsIterator);
+        assertEquals(2, flights.size());
+    }
+
 
 }

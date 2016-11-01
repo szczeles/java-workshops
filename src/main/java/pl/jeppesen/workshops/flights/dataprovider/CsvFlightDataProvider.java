@@ -2,9 +2,7 @@ package pl.jeppesen.workshops.flights.dataprovider;
 
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
-import com.opencsv.bean.ColumnPositionMappingStrategy;
-import com.opencsv.bean.CsvToBean;
-import com.opencsv.bean.HeaderColumnNameMappingStrategy;
+import com.opencsv.bean.*;
 import com.opencsv.enums.CSVReaderNullFieldIndicator;
 import pl.jeppesen.workshops.flights.model.Flight;
 
@@ -25,18 +23,31 @@ public class CsvFlightDataProvider implements FlightDataProvider {
                 "id", "dateFromString", "aircraftId", "stdFromTimestamp", "staFromTimestamp", "from", "to", "airline"});
     }
 
+
+
     @Override
     public List<Flight> getFlights() {
-        try {
-            Reader fileReader = new FileReader(fileLocation);
-            CSVReader reader = new CSVReaderBuilder(fileReader)
-                    .withFieldAsNull(CSVReaderNullFieldIndicator.EMPTY_SEPARATORS)
-                    .withSkipLines(1)
-                    .build();
+        return new CsvToBean().parse(mappingStrategy, getReader());
+    }
 
-            return new CsvToBean().parse(mappingStrategy, reader);
+    private CSVReader getReader()  {
+        Reader fileReader = null;
+        try {
+            fileReader = new FileReader(fileLocation);
         } catch (FileNotFoundException e) {
             throw new RuntimeException("Flights csv file " + fileLocation + " not found", e);
         }
+        return new CSVReaderBuilder(fileReader)
+                .withFieldAsNull(CSVReaderNullFieldIndicator.EMPTY_SEPARATORS)
+                .withSkipLines(1)
+                .build();
+    }
+
+    @Override
+    public Iterable<Flight> getFlightsIterator() {
+        return new IterableCSVToBeanBuilder<Flight>()
+                .withReader(getReader())
+                .withMapper(mappingStrategy)
+                .build();
     }
 }

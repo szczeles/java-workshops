@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface FlightDataProvider {
     List<Flight> getFlights();
+
+    Iterable<Flight> getFlightsIterator();
 }
