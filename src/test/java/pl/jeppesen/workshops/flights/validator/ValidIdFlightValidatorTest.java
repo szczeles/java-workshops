@@ -1,5 +1,6 @@
 package pl.jeppesen.workshops.flights.validator;
 
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import pl.jeppesen.workshops.flights.model.Flight;
 
@@ -11,30 +12,20 @@ public class ValidIdFlightValidatorTest {
 
     private final ValidIdFlightValidator validIdFlightValidator = new ValidIdFlightValidator();
 
-    @Test
-    public void shouldRejectFlightWithoutId() {
-        assertFalse(
-                validIdFlightValidator.isValid(new Flight(null, LocalDate.now(), "AIRLINE"))
-        );
+    @DataProvider(name = "multipleIdsDataProvider")
+    public Object[][] testingData() {
+        return new Object[][] {
+                {"ID", LocalDate.now(), "AIRLINE", true},
+                {null, LocalDate.now(), "AIRLINE", false},
+                {"ID", null,            "AIRLINE", false},
+                {"ID", LocalDate.now(), null     , false},
+        };
     }
 
-    @Test
-    public void shouldRejectFlightWithoutDate() {
-        assertFalse(
-                validIdFlightValidator.isValid(new Flight("ID", null, "AIRLINE"))
-        );
-    }
-
-    @Test
-    public void shouldRejectFlightWithoutAirline() {
-        assertFalse(
-                validIdFlightValidator.isValid(new Flight("ID", LocalDate.now(), null))
-        );
-    }
-    @Test
-    public void shouldAcceptFlightWithoutAirline() {
-        assertTrue(
-                validIdFlightValidator.isValid(new Flight("ID", LocalDate.now(), "AIRLINE"))
-        );
+    @Test(dataProvider = "multipleIdsDataProvider")
+    public void shouldTestValidator(String id, LocalDate date, String airline, boolean verdict) {
+        assertEquals(verdict, validIdFlightValidator.isValid(
+                new Flight(id, date, airline)
+        ));
     }
 }

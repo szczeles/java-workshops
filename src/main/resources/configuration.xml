@@ -2,7 +2,6 @@
     <input>
         <flightsCsv>
             <path>data/flights.csv</path>
-            <path>data/flights.csv</path>
         </flightsCsv>
     </input>
     <validation>
