@@ -33,4 +33,9 @@ public class Configuration {
     public String getFlightsCsvPath() {
         return document.xpath("/etl/input/flightsCsv/path").text().trim();
     }
+
+    public List<String> getAirports() {
+        return document.xpath("/etl/validation/airports/airport")
+                .map(xml -> xml.element().getTextContent());
+    }
 }

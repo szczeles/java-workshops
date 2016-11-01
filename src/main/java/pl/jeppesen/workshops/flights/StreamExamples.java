@@ -15,6 +15,16 @@ import static java.util.stream.Collectors.toList;
  */
 public class StreamExamples {
     public static void main(String[] args) throws IOException {
+
+        /*
+
+        flights.stream()
+                .filter(flight -> flightValidator.isValid(flight))
+                .sorted(Comparator.comparing(Flight::getDate))
+                .findFirst()
+                .ifPresent(System.out::println);
+
+         */
         List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8);
         List<Integer> twoEvenSquares =
                 numbers.stream()
