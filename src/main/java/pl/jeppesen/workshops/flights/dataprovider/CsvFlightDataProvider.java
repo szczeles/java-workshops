@@ -1,5 +1,8 @@
 package pl.jeppesen.workshops.flights.dataprovider;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Iterators;
+import com.opencsv.CSVIterator;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.bean.*;
@@ -8,7 +11,9 @@ import pl.jeppesen.workshops.flights.model.Flight;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.Reader;
+import java.util.Iterator;
 import java.util.List;
 
 public class CsvFlightDataProvider implements FlightDataProvider {
@@ -45,9 +50,30 @@ public class CsvFlightDataProvider implements FlightDataProvider {
 
     @Override
     public Iterable<Flight> getFlightsIterator() {
-        return new IterableCSVToBeanBuilder<Flight>()
-                .withReader(getReader())
-                .withMapper(mappingStrategy)
-                .build();
+        return new Iterable<Flight>() {
+            @Override
+            public Iterator<Flight> iterator() {
+                try {
+                    CSVIterator csvIterator = new CSVIterator(getReader());
+                    return Iterators.transform(csvIterator, new Function<String[], Flight>() {
+                        @Override
+                        public Flight apply(String[] d) {
+                            Flight f = new Flight();
+                            f.setId(d[0]);
+                            f.setDateFromString(d[1]);
+                            f.setAircraftId(d[2]);
+                            f.setStdFromTimestamp(d[3]);
+                            f.setStaFromTimestamp(d[4]);
+                            f.setFrom(d[5]);
+                            f.setTo(d[6]);
+                            f.setAirline(d[7]);
+                            return f;
+                        }
+                    });
+                } catch (IOException e) {
+                    throw new RuntimeException("Unable to iterator over flights csv");
+                }
+            }
+        };
     }
 }
