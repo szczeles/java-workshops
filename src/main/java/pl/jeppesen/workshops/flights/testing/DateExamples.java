@@ -1,4 +1,4 @@
-package pl.jeppesen.workshops.flights;
+package pl.jeppesen.workshops.flights.testing;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;

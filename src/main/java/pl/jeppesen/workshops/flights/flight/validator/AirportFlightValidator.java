@@ -1,7 +1,7 @@
-package pl.jeppesen.workshops.flights.validator;
+package pl.jeppesen.workshops.flights.flight.validator;
 
 import com.google.common.collect.Sets;
-import pl.jeppesen.workshops.flights.model.Flight;
+import pl.jeppesen.workshops.flights.flight.Flight;
 
 import java.util.List;
 import java.util.Set;

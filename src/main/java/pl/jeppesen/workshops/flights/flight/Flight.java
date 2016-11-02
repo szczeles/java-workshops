@@ -1,4 +1,4 @@
-package pl.jeppesen.workshops.flights.model;
+package pl.jeppesen.workshops.flights.flight;
 
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvDate;

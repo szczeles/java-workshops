@@ -1,4 +1,4 @@
-package pl.jeppesen.workshops.flights.dataprovider;
+package pl.jeppesen.workshops.flights.flight.dataprovider;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Iterators;
@@ -7,7 +7,7 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.bean.*;
 import com.opencsv.enums.CSVReaderNullFieldIndicator;
-import pl.jeppesen.workshops.flights.model.Flight;
+import pl.jeppesen.workshops.flights.flight.Flight;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;

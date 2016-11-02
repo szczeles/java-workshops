@@ -1,4 +1,4 @@
-package pl.jeppesen.workshops.flights;
+package pl.jeppesen.workshops.flights.testing;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;

@@ -1,8 +1,8 @@
-package pl.jeppesen.workshops.flights.dataprovider;
+package pl.jeppesen.workshops.flights.flight.dataprovider;
 
 import com.google.common.collect.Lists;
 import org.testng.annotations.Test;
-import pl.jeppesen.workshops.flights.model.Flight;
+import pl.jeppesen.workshops.flights.flight.Flight;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

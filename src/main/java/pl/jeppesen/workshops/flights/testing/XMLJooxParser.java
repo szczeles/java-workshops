@@ -1,4 +1,4 @@
-package pl.jeppesen.workshops.flights;
+package pl.jeppesen.workshops.flights.testing;
 
 import org.joox.Match;
 import org.xml.sax.SAXException;

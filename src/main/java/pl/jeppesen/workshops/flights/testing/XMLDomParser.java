@@ -1,4 +1,4 @@
-package pl.jeppesen.workshops.flights;
+package pl.jeppesen.workshops.flights.testing;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

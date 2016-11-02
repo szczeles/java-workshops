@@ -1,10 +1,8 @@
-package pl.jeppesen.workshops.flights.validator;
+package pl.jeppesen.workshops.flights.flight.validator;
 
 import com.beust.jcommander.internal.Lists;
 import org.testng.annotations.Test;
-import pl.jeppesen.workshops.flights.model.Flight;
-
-import java.util.List;
+import pl.jeppesen.workshops.flights.flight.Flight;
 
 import static org.testng.Assert.*;
 

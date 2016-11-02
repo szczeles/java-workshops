@@ -1,6 +1,6 @@
-package pl.jeppesen.workshops.flights.validator;
+package pl.jeppesen.workshops.flights.flight.validator;
 
-import pl.jeppesen.workshops.flights.model.Flight;
+import pl.jeppesen.workshops.flights.flight.Flight;
 
 import java.time.LocalDate;
 
