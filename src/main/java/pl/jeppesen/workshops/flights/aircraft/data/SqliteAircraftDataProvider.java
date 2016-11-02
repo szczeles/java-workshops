@@ -9,6 +9,7 @@ import javax.swing.text.DateFormatter;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 /**
  * Created by mariusz.strzelecki on 02.11.16.
@@ -29,7 +30,7 @@ public class SqliteAircraftDataProvider implements AircraftDataProvider {
     }
 
     @Override
-    public Aircraft getAirfract(String id) throws AircraftNotFoundException {
+    public Aircraft getAircraftIfExists(String id) throws AircraftNotFoundException {
         try {
             statement.setString(1, id);
             ResultSet resultSet = statement.executeQuery();
@@ -55,6 +56,15 @@ public class SqliteAircraftDataProvider implements AircraftDataProvider {
 
         } catch (SQLException e) {
             throw new RuntimeException("Aircraft database is not valid", e);
+        }
+    }
+
+    @Override
+    public Optional<Aircraft> getAircraft(String id) {
+        try {
+            return Optional.of(getAircraftIfExists(id));
+        } catch (AircraftNotFoundException e) {
+            return Optional.empty();
         }
     }
 }

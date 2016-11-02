@@ -19,7 +19,7 @@ public class SqliteAircraftDataProviderTest {
     public void shouldGetJetAirfract() throws Exception {
         SqliteAircraftDataProvider aircraftDataProvider = new SqliteAircraftDataProvider("src/test/resources/aircrafts.db");
 
-        Aircraft airfract = aircraftDataProvider.getAirfract("YL-PSD");
+        Aircraft airfract = aircraftDataProvider.getAircraftIfExists("YL-PSD");
 
         assertEquals("YL-PSD", airfract.getId());
         assertEquals(LocalDate.of(2000, 03, 06), airfract.getFirstFlight());
@@ -36,7 +36,7 @@ public class SqliteAircraftDataProviderTest {
     public void shouldGetTurbopropAirfract() throws Exception {
         SqliteAircraftDataProvider aircraftDataProvider = new SqliteAircraftDataProvider("src/test/resources/aircrafts.db");
 
-        Aircraft airfract = aircraftDataProvider.getAirfract("YL-BBW");
+        Aircraft airfract = aircraftDataProvider.getAircraftIfExists("YL-BBW");
 
         assertEquals("YL-BBW", airfract.getId());
         assertNull(airfract.getFirstFlight());
@@ -53,7 +53,22 @@ public class SqliteAircraftDataProviderTest {
     public void shouldThrowExceptionIfAircraftNotFound() throws Exception {
         SqliteAircraftDataProvider aircraftDataProvider = new SqliteAircraftDataProvider("src/test/resources/aircrafts.db");
 
-        aircraftDataProvider.getAirfract("UNKNOWN");
+        aircraftDataProvider.getAircraftIfExists("UNKNOWN");
+    }
+
+    @Test
+    public void shouldReturnEmptyOptionalIfAircraftNotExist() throws Exception {
+        SqliteAircraftDataProvider aircraftDataProvider = new SqliteAircraftDataProvider("src/test/resources/aircrafts.db");
+
+        assertFalse(aircraftDataProvider.getAircraft("UNKNOWN").isPresent());
+    }
+
+    @Test
+    public void shouldReturnValidOptional() throws Exception {
+        SqliteAircraftDataProvider aircraftDataProvider = new SqliteAircraftDataProvider("src/test/resources/aircrafts.db");
+
+        assertTrue(aircraftDataProvider.getAircraft("YL-BBW").isPresent());
+        assertEquals("YL-BBW", aircraftDataProvider.getAircraft("YL-BBW").get().getId());
     }
 
 }

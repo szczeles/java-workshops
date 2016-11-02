@@ -8,5 +8,7 @@ import java.util.Optional;
  * Created by mariusz.strzelecki on 02.11.16.
  */
 public interface AircraftDataProvider {
-    Aircraft getAirfract(String id) throws AircraftNotFoundException;
+    Aircraft getAircraftIfExists(String id) throws AircraftNotFoundException;
+
+    Optional<Aircraft> getAircraft(String id);
 }
