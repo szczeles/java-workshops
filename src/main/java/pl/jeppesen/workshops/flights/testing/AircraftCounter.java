@@ -12,29 +12,30 @@ import pl.jeppesen.workshops.flights.flight.dataprovider.CsvFlightDataProvider;
 import pl.jeppesen.workshops.flights.flight.validator.*;
 
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by mariusz.strzelecki on 03.11.16.
  */
 public class AircraftCounter implements  Runnable {
-    private final HashSet<String> aircrafts;
+    private final Set<String> aircrafts;
     private Iterable<Flight> flightsIterator;
-    private FlightValidator flightValidator;
-    private boolean stopMe;
 
-    public AircraftCounter(Iterable<Flight> flightsIterator) {
+    public AircraftCounter(Iterable<Flight> flightsIterator, Set<String> aircrafts) {
 
         this.flightsIterator = flightsIterator;
-        aircrafts = Sets.newHashSet();
+        this.aircrafts = aircrafts;
     }
 
     @Override
     public void run() {
 
         for (Flight flight : flightsIterator) {
+            if (flight.getAircraftId() == null) {
+                continue;
+            }
             aircrafts.add(flight.getAircraftId());
         }
-        System.out.println(aircrafts.size());
 
 
     }
@@ -44,12 +45,24 @@ public class AircraftCounter implements  Runnable {
         Configuration configuration = new Configuration("src/main/resources/configuration.xml");
         CsvFlightDataProvider flightDataProvider = new CsvFlightDataProvider(configuration.getFlightsCsvPath());
 
-        AircraftCounter counter = new AircraftCounter(flightDataProvider.getFlightsIterator());
-        Thread counterThread = new Thread(counter);
-        Stopwatch stopwatch = Stopwatch.createStarted();
-        counterThread.start();
+        Set<String> aircrafts = Sets.newConcurrentHashSet();
 
-        counterThread.join();
+        AircraftCounter counter = new AircraftCounter(
+                new CsvFlightDataProvider(configuration.getFlightsCsvPath()).getFlightsIterator(), aircrafts);
+        Thread counterThread1 = new Thread(counter);
+
+        AircraftCounter counter2 = new AircraftCounter(
+                new CsvFlightDataProvider(configuration.getFlightsCsvPath()).getFlightsIterator(), aircrafts);
+        Thread counterThread2 = new Thread(counter2);
+
+        ;
+        counterThread1.start();
+        counterThread2.start();
+        Stopwatch stopwatch = Stopwatch.createStarted();
+
+        counterThread1.join();
+        counterThread2.join();
+        System.out.println(aircrafts.size());
         System.out.println(stopwatch);
     }
 }
