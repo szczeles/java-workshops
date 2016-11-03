@@ -2,6 +2,7 @@ package pl.jeppesen.workshops.flights;
 
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
+import org.slf4j.Logger;
 import pl.jeppesen.workshops.flights.aircraft.data.AircraftDataProvider;
 import pl.jeppesen.workshops.flights.aircraft.data.SqliteAircraftDataProvider;
 import pl.jeppesen.workshops.flights.configuration.Configuration;
@@ -10,10 +11,7 @@ import pl.jeppesen.workshops.flights.flight.dataprovider.CsvFlightDataProvider;
 import pl.jeppesen.workshops.flights.flight.validator.*;
 
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -26,7 +24,8 @@ public class Application {
         FlightValidator flightValidator = new OverallFlightValidator(Lists.newArrayList(
                 new ValidIdFlightValidator(),
                 new DateRangeFlightValidator(configuration.getDateRangeFrom(), configuration.getDateRangeTo()),
-                new AirportFlightValidator(configuration.getAirports())
+                new AirportFlightValidator(configuration.getAirports()),
+                new ValidAircraftFlightValidator(aircraftDataProvider)
         ));
 //
 //        ,
@@ -43,15 +42,19 @@ public class Application {
         for (Flight f : flightDataProvider.getFlightsIterator()) {
             tasks.add(executorService.submit(() -> flightValidator.isValid(f)));
         }
+        executorService.shutdown();
         int valid = 0;
         for (Future<Boolean> task : tasks) {
             if (task.get()) {
                 valid ++;
             }
         }
+        executorService.awaitTermination(1, TimeUnit.DAYS);
         System.out.println(valid);
 
         System.out.println(stopwatch);
+
+        aircraftDataProvider.close();
 
     }
 

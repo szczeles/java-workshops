@@ -1,5 +1,6 @@
 package pl.jeppesen.workshops.flights.aircraft.data;
 
+import com.zaxxer.hikari.HikariDataSource;
 import pl.jeppesen.workshops.flights.aircraft.Aircraft;
 import pl.jeppesen.workshops.flights.aircraft.JetAircraft;
 import pl.jeppesen.workshops.flights.aircraft.TurbopropAircraft;
@@ -14,16 +15,17 @@ import java.util.Optional;
  * Created by mariusz.strzelecki on 02.11.16.
  */
 public class SqliteAircraftDataProvider implements AircraftDataProvider {
-    private final Connection connection;
-    private final PreparedStatement statement;
+//    private final Connection connection;
+//    private final PreparedStatement statement;
+    private final HikariDataSource dataSource;
     private DateTimeFormatter dmyFormatter = DateTimeFormatter.ofPattern("dd-MM-yy");
     private DateTimeFormatter myFormatter = DateTimeFormatter.ofPattern("MM-yy");
 
     public SqliteAircraftDataProvider(String databaseFile) {
         try {
             Class.forName("org.sqlite.JDBC");
-            connection = DriverManager.getConnection("jdbc:sqlite:" + databaseFile);
-            statement = connection.prepareStatement("SELECT * FROM aircraft WHERE id = ?");
+            dataSource = new HikariDataSource();
+            dataSource.setJdbcUrl("jdbc:sqlite:" + databaseFile);
         } catch (Exception e) {
             throw new RuntimeException("Aircraft database is not valid", e);
         }
@@ -31,7 +33,9 @@ public class SqliteAircraftDataProvider implements AircraftDataProvider {
 
     @Override
     public  Aircraft getAircraftIfExists(String id) throws AircraftNotFoundException {
-        try {
+
+        try (Connection connection = dataSource.getConnection()){
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM aircraft WHERE id = ?");
             statement.setString(1, id);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -75,5 +79,10 @@ public class SqliteAircraftDataProvider implements AircraftDataProvider {
         } catch (AircraftNotFoundException e) {
             return Optional.empty();
         }
+    }
+
+    @Override
+    public void close() {
+        dataSource.close();
     }
 }

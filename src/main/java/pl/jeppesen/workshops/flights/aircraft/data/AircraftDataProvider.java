@@ -11,4 +11,6 @@ public interface AircraftDataProvider {
     Aircraft getAircraftIfExists(String id) throws AircraftNotFoundException;
 
     Optional<Aircraft> getAircraft(String id);
+
+    void close();
 }
