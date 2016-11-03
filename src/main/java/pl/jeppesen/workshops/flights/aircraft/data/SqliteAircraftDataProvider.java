@@ -1,13 +1,12 @@
 package pl.jeppesen.workshops.flights.aircraft.data;
 
-import org.apache.commons.dbutils.BeanProcessor;
 import pl.jeppesen.workshops.flights.aircraft.Aircraft;
 import pl.jeppesen.workshops.flights.aircraft.JetAircraft;
 import pl.jeppesen.workshops.flights.aircraft.TurbopropAircraft;
 
-import javax.swing.text.DateFormatter;
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
@@ -17,7 +16,8 @@ import java.util.Optional;
 public class SqliteAircraftDataProvider implements AircraftDataProvider {
     private final Connection connection;
     private final PreparedStatement statement;
-    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yy");
+    private DateTimeFormatter dmyFormatter = DateTimeFormatter.ofPattern("dd-MM-yy");
+    private DateTimeFormatter myFormatter = DateTimeFormatter.ofPattern("MM-yy");
 
     public SqliteAircraftDataProvider(String databaseFile) {
         try {
@@ -30,7 +30,7 @@ public class SqliteAircraftDataProvider implements AircraftDataProvider {
     }
 
     @Override
-    public Aircraft getAircraftIfExists(String id) throws AircraftNotFoundException {
+    public  Aircraft getAircraftIfExists(String id) throws AircraftNotFoundException {
         try {
             statement.setString(1, id);
             ResultSet resultSet = statement.executeQuery();
@@ -44,8 +44,9 @@ public class SqliteAircraftDataProvider implements AircraftDataProvider {
                     ((TurbopropAircraft)aircraft).setEngines(resultSet.getInt(7));
                 }
                 aircraft.setId(resultSet.getString(1));
-                if (!resultSet.getString(2).equals("N/A")) {
-                    aircraft.setFirstFlight(LocalDate.parse(resultSet.getString(2), formatter));
+                String dateField = resultSet.getString(2);
+                if (!dateField.equals("N/A")) {
+                    aircraft.setFirstFlight(parseDate(dateField));
                 }
                 aircraft.setName(resultSet.getString(3));
                 aircraft.setModel(resultSet.getString(4));
@@ -56,6 +57,14 @@ public class SqliteAircraftDataProvider implements AircraftDataProvider {
 
         } catch (SQLException e) {
             throw new RuntimeException("Aircraft database is not valid", e);
+        }
+    }
+
+    private LocalDate parseDate(String dateField) {
+        switch (dateField.length()) {
+            case 8: return LocalDate.parse(dateField, dmyFormatter);
+            case 5: return YearMonth.parse(dateField, myFormatter).atDay(1);
+            default: return null;
         }
     }
 
