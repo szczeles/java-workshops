@@ -5,13 +5,15 @@ import com.google.common.collect.Lists;
 import pl.jeppesen.workshops.flights.aircraft.data.AircraftDataProvider;
 import pl.jeppesen.workshops.flights.aircraft.data.SqliteAircraftDataProvider;
 import pl.jeppesen.workshops.flights.configuration.Configuration;
+import pl.jeppesen.workshops.flights.flight.Flight;
 import pl.jeppesen.workshops.flights.flight.dataprovider.CsvFlightDataProvider;
 import pl.jeppesen.workshops.flights.flight.validator.*;
 
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class Application {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         Configuration configuration = new Configuration("src/main/resources/configuration.xml");
 
         AircraftDataProvider aircraftDataProvider = new SqliteAircraftDataProvider("data/aircrafts.db");
@@ -25,11 +27,28 @@ public class Application {
 
         CsvFlightDataProvider flightDataProvider = new CsvFlightDataProvider(configuration.getFlightsCsvPath());
 
-        Stopwatch stopwatch = Stopwatch.createStarted();
-        System.out.println(StreamSupport.stream(flightDataProvider.getFlightsIterator().spliterator(), false)
-                .filter(flight -> flightValidator.isValid(flight))
-                .count());
-        System.out.println(stopwatch);
-        ;
+        //Stopwatch stopwatch = Stopwatch.createStarted();
+        Stream<Flight> stream = StreamSupport.stream(flightDataProvider.getFlightsIterator().spliterator(), false)
+                .filter(flight -> flightValidator.isValid(flight));
+
+
+
+        //System.out.println(stopwatch);
+
+    }
+
+    public static class AircraftCounter implements Runnable {
+
+        private final Stream<Flight> stream;
+
+        public AircraftCounter(Stream<Flight> stream) {
+            this.stream = stream;
+        }
+
+        @Override
+        public void run() {
+            stream.forEach(flight -> {int a = 1+1;});
+
+        }
     }
 }
