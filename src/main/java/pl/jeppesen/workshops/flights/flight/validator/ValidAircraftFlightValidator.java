@@ -25,7 +25,7 @@ public class ValidAircraftFlightValidator implements FlightValidator {
                 .fileMmapEnableIfSupported()
                 .fileMmapPreclearDisable()
                 .closeOnJvmShutdown().make();
-        cache = db.treeMap("map", Serializer.STRING, Serializer.BOOLEAN).createOrOpen();
+        cache = db.treeMap("mmm", Serializer.STRING, Serializer.BOOLEAN).createOrOpen();
     }
 
     @Override
