@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import pl.jeppesen.workshops.flights.aircraft.data.AircraftDataProvider;
 import pl.jeppesen.workshops.flights.aircraft.data.SqliteAircraftDataProvider;
 import pl.jeppesen.workshops.flights.configuration.Configuration;
+import pl.jeppesen.workshops.flights.dumper.FlightDumper;
+import pl.jeppesen.workshops.flights.dumper.H2FlightDumper;
 import pl.jeppesen.workshops.flights.flight.Flight;
 import pl.jeppesen.workshops.flights.flight.dataprovider.CsvFlightDataProvider;
 import pl.jeppesen.workshops.flights.flight.validator.*;
@@ -17,7 +19,7 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class Application {
-    public static void main(String[] args) throws InterruptedException, ExecutionException {
+    public static void main(String[] args) throws Exception {
         Configuration configuration = new Configuration("src/main/resources/configuration.xml");
 
         AircraftDataProvider aircraftDataProvider = new SqliteAircraftDataProvider("data/aircrafts.db");
@@ -36,14 +38,19 @@ public class Application {
 
         CsvFlightDataProvider flightDataProvider = new CsvFlightDataProvider(configuration.getFlightsCsvPath());
 
-        Stopwatch stopwatch = Stopwatch.createStarted();
-        Stream<Flight> stream = StreamSupport.stream(flightDataProvider.getFlightsIterator().spliterator(), true)
-                .filter(flight -> flightValidator.isValid(flight));
+        try (FlightDumper dumper = new H2FlightDumper("./data/dumper/h2")) {
+            Stopwatch stopwatch = Stopwatch.createStarted();
+            Stream<Flight> stream = StreamSupport.stream(flightDataProvider.getFlightsIterator().spliterator(), true)
+                    .filter(flight -> flightValidator.isValid(flight));
 
-        System.out.println(stream.count());
-        System.out.println(stopwatch);
+            dumper.dumpStream(stream);
 
-        aircraftDataProvider.close();
+            System.out.println(dumper.count());
+            System.out.println(stopwatch);
+        } finally {
+            aircraftDataProvider.close();
+        }
+
 
     }
 }

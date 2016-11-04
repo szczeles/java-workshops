@@ -58,7 +58,7 @@ public class ValidAircraftFlightValidatorTest {
         assertTrue(flightValidator.isValid(f));
         Mockito.verify(dataProvider).getAircraft("ID");
         Mockito.verifyNoMoreInteractions(dataProvider);
-        
+
         assertTrue(flightValidator.isValid(f));
         assertTrue(flightValidator.isValid(f));
     }
