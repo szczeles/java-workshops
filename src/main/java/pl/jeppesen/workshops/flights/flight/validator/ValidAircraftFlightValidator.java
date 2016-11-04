@@ -2,6 +2,10 @@ package pl.jeppesen.workshops.flights.flight.validator;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import org.mapdb.BTreeMap;
+import org.mapdb.DB;
+import org.mapdb.DBMaker;
+import org.mapdb.Serializer;
 import pl.jeppesen.workshops.flights.aircraft.data.AircraftDataProvider;
 import pl.jeppesen.workshops.flights.flight.Flight;
 
@@ -17,7 +21,11 @@ public class ValidAircraftFlightValidator implements FlightValidator {
 
     public ValidAircraftFlightValidator(AircraftDataProvider dataProvider) {
         this.dataProvider = dataProvider;
-        cache = Maps.newConcurrentMap();
+        DB db = DBMaker.fileDB("/tmp/elo5")
+                .fileMmapEnableIfSupported()
+                .fileMmapPreclearDisable()
+                .closeOnJvmShutdown().make();
+        cache = db.treeMap("map", Serializer.STRING, Serializer.BOOLEAN).createOrOpen();
     }
 
     @Override
@@ -25,9 +33,11 @@ public class ValidAircraftFlightValidator implements FlightValidator {
         if (f.getAircraftId() == null) {
             return false;
         }
-        if (!cache.containsKey(f.getAircraftId())) {
-            cache.put(f.getAircraftId(), dataProvider.getAircraft(f.getAircraftId()).isPresent());
+        Boolean result = cache.get(f.getAircraftId());
+        if (result == null) {
+            result = dataProvider.getAircraft(f.getAircraftId()).isPresent();
+            cache.put(f.getAircraftId(), result);
         }
-        return cache.get(f.getAircraftId());
+        return result;
     }
 }
