@@ -1,5 +1,6 @@
 package pl.jeppesen.workshops.flights.flight.validator;
 
+import org.mapdb.DBMaker;
 import org.mockito.AdditionalMatchers;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
@@ -22,16 +23,17 @@ import static org.testng.Assert.*;
 public class ValidAircraftFlightValidatorTest {
 
     private ValidAircraftFlightValidator flightValidator;
+    private AircraftDataProvider dataProvider;
 
     @BeforeMethod
     public void setUp () {
-        AircraftDataProvider dataProvider = Mockito.mock(AircraftDataProvider.class);
+        dataProvider = Mockito.mock(AircraftDataProvider.class);
         Aircraft aircraft = Mockito.mock(Aircraft.class);
         when(dataProvider.getAircraft("ID")).thenReturn(Optional.of(aircraft));
         when(dataProvider.getAircraft(AdditionalMatchers.not(Matchers.eq("ID"))))
                 .thenReturn(Optional.empty());
 
-        flightValidator = new ValidAircraftFlightValidator(dataProvider);
+        flightValidator = new ValidAircraftFlightValidator(dataProvider, DBMaker.heapDB().make());
     }
 
     @Test
@@ -46,6 +48,19 @@ public class ValidAircraftFlightValidatorTest {
         Flight f = new Flight();
         f.setAircraftId("INVALID");
         assertFalse(flightValidator.isValid(f));
+    }
+
+    @Test
+    public void shouldUseCache() {
+        Flight f = new Flight();
+        f.setAircraftId("ID");
+
+        assertTrue(flightValidator.isValid(f));
+        Mockito.verify(dataProvider).getAircraft("ID");
+        Mockito.verifyNoMoreInteractions(dataProvider);
+        
+        assertTrue(flightValidator.isValid(f));
+        assertTrue(flightValidator.isValid(f));
     }
 
 }

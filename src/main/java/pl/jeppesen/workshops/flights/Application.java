@@ -2,6 +2,8 @@ package pl.jeppesen.workshops.flights;
 
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
+import org.mapdb.DB;
+import org.mapdb.DBMaker;
 import org.slf4j.Logger;
 import pl.jeppesen.workshops.flights.aircraft.data.AircraftDataProvider;
 import pl.jeppesen.workshops.flights.aircraft.data.SqliteAircraftDataProvider;
@@ -20,11 +22,16 @@ public class Application {
 
         AircraftDataProvider aircraftDataProvider = new SqliteAircraftDataProvider("data/aircrafts.db");
 
+        DB db = DBMaker.fileDB("/tmp/elo5")
+                .fileMmapEnableIfSupported()
+                .fileMmapPreclearDisable()
+                .closeOnJvmShutdown().make();
+
         FlightValidator flightValidator = new OverallFlightValidator(Lists.newArrayList(
                 new ValidIdFlightValidator(),
                 new DateRangeFlightValidator(configuration.getDateRangeFrom(), configuration.getDateRangeTo()),
                 new AirportFlightValidator(configuration.getAirports()),
-                new ValidAircraftFlightValidator(aircraftDataProvider)
+                new ValidAircraftFlightValidator(aircraftDataProvider, db)
         ));
 
         CsvFlightDataProvider flightDataProvider = new CsvFlightDataProvider(configuration.getFlightsCsvPath());

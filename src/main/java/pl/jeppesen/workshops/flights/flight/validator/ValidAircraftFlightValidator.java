@@ -19,12 +19,8 @@ public class ValidAircraftFlightValidator implements FlightValidator {
     private final Map<String, Boolean> cache;
     private AircraftDataProvider dataProvider;
 
-    public ValidAircraftFlightValidator(AircraftDataProvider dataProvider) {
+    public ValidAircraftFlightValidator(AircraftDataProvider dataProvider, DB db) {
         this.dataProvider = dataProvider;
-        DB db = DBMaker.fileDB("/tmp/elo5")
-                .fileMmapEnableIfSupported()
-                .fileMmapPreclearDisable()
-                .closeOnJvmShutdown().make();
         cache = db.treeMap("mmm", Serializer.STRING, Serializer.BOOLEAN).createOrOpen();
     }
 
