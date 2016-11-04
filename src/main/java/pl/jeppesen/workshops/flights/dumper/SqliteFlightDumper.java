@@ -44,4 +44,8 @@ public class SqliteFlightDumper extends AbstractFlightDumper {
     PreparedStatement getInsertStatement(Connection conn) throws SQLException {
         return conn.prepareStatement("INSERT OR IGNORE INTO flight VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
     }
+
+    HikariDataSource getDataSource() {
+        return dataSource;
+    }
 }
