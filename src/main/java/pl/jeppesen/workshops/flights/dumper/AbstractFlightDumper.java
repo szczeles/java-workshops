@@ -1,13 +1,12 @@
 package pl.jeppesen.workshops.flights.dumper;
 
 import com.zaxxer.hikari.HikariDataSource;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.ScalarHandler;
 import pl.jeppesen.workshops.flights.flight.Flight;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Stream;
@@ -62,5 +61,15 @@ abstract public class AbstractFlightDumper implements FlightDumper{
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public int countReal() {
+        QueryRunner runner = new QueryRunner(dataSource);
+        try {
+            return runner.query("SELECT COUNT(*) FROM flight", new ScalarHandler<Integer>());
+        } catch (SQLException e1) {
+            throw new RuntimeException("Unable to count", e1);
+        }
     }
 }

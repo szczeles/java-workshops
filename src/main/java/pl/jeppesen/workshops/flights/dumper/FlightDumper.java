@@ -13,4 +13,6 @@ public interface FlightDumper extends AutoCloseable {
     int count();
 
     void dumpStream(Stream<Flight> stream);
+
+    int countReal();
 }

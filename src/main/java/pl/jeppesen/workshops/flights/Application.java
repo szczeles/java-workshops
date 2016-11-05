@@ -2,10 +2,8 @@ package pl.jeppesen.workshops.flights;
 
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.Options;
+import org.apache.commons.cli.*;
+import org.jetbrains.annotations.NotNull;
 import org.mapdb.DB;
 import org.mapdb.DBMaker;
 import org.slf4j.Logger;
@@ -26,16 +24,38 @@ import java.util.stream.StreamSupport;
 public class Application {
 
     public static void main(String[] args) throws Exception {
-        Options options = new Options();
-        options.addOption("output", true, "resulting database, h2 or sqlite");
-        options.addOption("config", true, "configurationXML");
+        Options options = getCliOptions();
         CommandLineParser parser = new DefaultParser();
-        CommandLine cli = parser.parse(options, args);
+        CommandLine cli;
 
-        Configuration configuration = new Configuration(cli.getOptionValue("config"));
-        OutputDB resultingDB = OutputDB.valueOf(cli.getOptionValue("output").toUpperCase());
+        try {
+            cli = parser.parse(options, args);
 
-        run(configuration, resultingDB);
+            if (cli.hasOption("help")) {
+                printHelp(options);
+            }
+
+            Configuration configuration = new Configuration(cli.getOptionValue("config"));
+            OutputDB resultingDB = OutputDB.valueOf(cli.getOptionValue("output").toUpperCase());
+
+            run(configuration, resultingDB);
+        } catch (ParseException e) {
+            printHelp(options);
+        }
+    }
+
+    private static void printHelp(Options options) {
+        new HelpFormatter().printHelp("flights-etl", options);
+        System.exit(0);
+    }
+
+    @NotNull
+    private static Options getCliOptions() {
+        Options options = new Options();
+        options.addOption("d", "db", true, "resulting database, h2 or sqlite");
+        options.addOption("c", "config", true, "configuration xml location");
+        options.addOption("h", "help", false, "print help message");
+        return options;
     }
 
     private static void run(Configuration configuration, OutputDB resultingDB) throws Exception {
@@ -63,6 +83,7 @@ public class Application {
             dumper.dumpStream(stream);
 
             System.out.println(dumper.count());
+            System.out.println(dumper.countReal());
             System.out.println(stopwatch);
         } finally {
             aircraftDataProvider.close();
