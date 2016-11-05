@@ -3,7 +3,18 @@
         <flightsCsv>
             <path>data/flights.csv</path>
         </flightsCsv>
+        <aircraftsDB>
+            <path>data/aircrafts.db</path>
+        </aircraftsDB>
     </input>
+    <output>
+        <h2>
+            ./data/dumper/h2
+        </h2>
+        <sqlite>
+            ./data/dumper/sqlite.db
+        </sqlite>
+    </output>
     <validation>
         <dateRange>
             <from>2015-10-01</from>

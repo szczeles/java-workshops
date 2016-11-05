@@ -2,12 +2,17 @@ package pl.jeppesen.workshops.flights;
 
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.Options;
 import org.mapdb.DB;
 import org.mapdb.DBMaker;
 import org.slf4j.Logger;
 import pl.jeppesen.workshops.flights.aircraft.data.AircraftDataProvider;
 import pl.jeppesen.workshops.flights.aircraft.data.SqliteAircraftDataProvider;
 import pl.jeppesen.workshops.flights.configuration.Configuration;
+import pl.jeppesen.workshops.flights.configuration.OutputDB;
 import pl.jeppesen.workshops.flights.dumper.FlightDumper;
 import pl.jeppesen.workshops.flights.dumper.H2FlightDumper;
 import pl.jeppesen.workshops.flights.flight.Flight;
@@ -19,12 +24,24 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class Application {
+
     public static void main(String[] args) throws Exception {
-        Configuration configuration = new Configuration("src/main/resources/configuration.xml");
+        Options options = new Options();
+        options.addOption("output", true, "resulting database, h2 or sqlite");
+        options.addOption("config", true, "configurationXML");
+        CommandLineParser parser = new DefaultParser();
+        CommandLine cli = parser.parse(options, args);
 
-        AircraftDataProvider aircraftDataProvider = new SqliteAircraftDataProvider("data/aircrafts.db");
+        Configuration configuration = new Configuration(cli.getOptionValue("config"));
+        OutputDB resultingDB = OutputDB.valueOf(cli.getOptionValue("output").toUpperCase());
 
-        DB db = DBMaker.fileDB("/tmp/elo5")
+        run(configuration, resultingDB);
+    }
+
+    private static void run(Configuration configuration, OutputDB resultingDB) throws Exception {
+        AircraftDataProvider aircraftDataProvider = new SqliteAircraftDataProvider(configuration.getAircraftDBPath());
+
+        DB db = DBMaker.tempFileDB()
                 .fileMmapEnableIfSupported()
                 .fileMmapPreclearDisable()
                 .closeOnJvmShutdown().make();
@@ -38,7 +55,7 @@ public class Application {
 
         CsvFlightDataProvider flightDataProvider = new CsvFlightDataProvider(configuration.getFlightsCsvPath());
 
-        try (FlightDumper dumper = new H2FlightDumper("./data/dumper/h2")) {
+        try (FlightDumper dumper = resultingDB.initialize(configuration)) {
             Stopwatch stopwatch = Stopwatch.createStarted();
             Stream<Flight> stream = StreamSupport.stream(flightDataProvider.getFlightsIterator().spliterator(), true)
                     .filter(flight -> flightValidator.isValid(flight));
@@ -50,7 +67,5 @@ public class Application {
         } finally {
             aircraftDataProvider.close();
         }
-
-
     }
 }

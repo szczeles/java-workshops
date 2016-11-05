@@ -48,7 +48,6 @@ abstract public class AbstractFlightDumper implements FlightDumper{
                     statement.addBatch();
 
                     if (counter.incrementAndGet() % 1000 == 0) {
-                        System.out.println("batch");
                         statement.executeBatch();
                     }
 

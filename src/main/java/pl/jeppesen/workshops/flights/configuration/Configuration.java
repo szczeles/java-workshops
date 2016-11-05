@@ -38,4 +38,13 @@ public class Configuration {
         return document.xpath("/etl/validation/airports/airport")
                 .map(xml -> xml.element().getTextContent());
     }
+
+    public String getAircraftDBPath() {
+        return document.xpath("/etl/input/aircraftsDB/path").text().trim();
+    }
+
+    public String getOutputPath(String xpath) {
+        return document.xpath(xpath).text().trim();
+    }
+
 }
