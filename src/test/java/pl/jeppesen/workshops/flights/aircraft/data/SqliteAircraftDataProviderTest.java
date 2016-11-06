@@ -6,7 +6,11 @@ import pl.jeppesen.workshops.flights.aircraft.JetAircraft;
 import pl.jeppesen.workshops.flights.aircraft.TurbopropAircraft;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 
+import static java.time.temporal.ChronoField.DAY_OF_MONTH;
 import static org.testng.Assert.*;
 
 /**
@@ -69,6 +73,21 @@ public class SqliteAircraftDataProviderTest {
 
         assertTrue(aircraftDataProvider.getAircraft("YL-BBW").isPresent());
         assertEquals("YL-BBW", aircraftDataProvider.getAircraft("YL-BBW").get().getId());
+    }
+
+    @Test
+    public void shouldParseDate() {
+        DateTimeFormatter customDmy = new DateTimeFormatterBuilder()
+                .optionalStart()
+                .appendValue(DAY_OF_MONTH)
+                .appendLiteral("-")
+                .optionalEnd()
+                .appendPattern("MM-")
+                .appendValueReduced(ChronoField.YEAR_OF_ERA, 2, 2, LocalDate.now().minusYears(80))
+                .toFormatter();
+        System.out.println(LocalDate.parse("02-03-98", customDmy));
+        System.out.println(LocalDate.parse("02-03-10", customDmy));
+        System.out.println(LocalDate.parse("03-98", customDmy));
     }
 
 }

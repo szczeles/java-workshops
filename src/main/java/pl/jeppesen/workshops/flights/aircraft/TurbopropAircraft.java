@@ -13,4 +13,9 @@ public class TurbopropAircraft extends Aircraft {
     public void setEngines(int engines) {
         this.engines = engines;
     }
+
+    @Override
+    public String getType() {
+        return "turboprop";
+    }
 }

@@ -3,11 +3,16 @@ package pl.jeppesen.workshops.flights.flight;
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvDate;
 
+import javax.annotation.*;
+import javax.annotation.meta.TypeQualifier;
+import javax.annotation.meta.TypeQualifierDefault;
+import javax.annotation.meta.TypeQualifierNickname;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
+@ParametersAreNonnullByDefault
 public class Flight {
     private String id;
     private LocalDate date;
@@ -22,7 +27,7 @@ public class Flight {
     private String aircraftId;
     private static ZoneId plZone = ZoneId.of("Europe/Warsaw");
 
-    public Flight(String id, LocalDate date, String airline) {
+    public Flight(@Nonnull String id, @Nonnull LocalDate date, String airline) {
         this.id = id;
         this.date = date;
         this.airline = airline;
@@ -118,13 +123,13 @@ public class Flight {
 
     public void setStaFromTimestamp(String timestamp) {
         if (timestamp != null) {
-            sta = LocalDateTime.ofInstant(Instant.ofEpochSecond(Long.valueOf(timestamp)), plZone);
+            sta = LocalDateTime.ofInstant(Instant.ofEpochSecond(Long.parseLong(timestamp)), plZone);
         }
     }
 
     public void setStdFromTimestamp(String timestamp) {
         if (timestamp != null) {
-            std = LocalDateTime.ofInstant(Instant.ofEpochSecond(Long.valueOf(timestamp)), plZone);
+            std = LocalDateTime.ofInstant(Instant.ofEpochSecond(Long.parseLong(timestamp)), plZone);
         }
     }
 }

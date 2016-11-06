@@ -51,4 +51,6 @@ abstract public class Aircraft {
     public void setSeries(String series) {
         this.series = series;
     }
+
+    public abstract String getType();
 }

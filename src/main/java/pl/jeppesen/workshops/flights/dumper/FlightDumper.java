@@ -1,5 +1,6 @@
 package pl.jeppesen.workshops.flights.dumper;
 
+import pl.jeppesen.workshops.flights.aircraft.data.AircraftDataProvider;
 import pl.jeppesen.workshops.flights.flight.Flight;
 
 import java.io.Closeable;
@@ -15,4 +16,6 @@ public interface FlightDumper extends AutoCloseable {
     void dumpStream(Stream<Flight> stream);
 
     int countReal();
+
+    void dumpAircrafts(AircraftDataProvider aircraftDataProvider);
 }

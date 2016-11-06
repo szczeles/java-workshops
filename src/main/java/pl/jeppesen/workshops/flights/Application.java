@@ -36,7 +36,7 @@ public class Application {
             }
 
             Configuration configuration = new Configuration(cli.getOptionValue("config"));
-            OutputDB resultingDB = OutputDB.valueOf(cli.getOptionValue("output").toUpperCase());
+            OutputDB resultingDB = OutputDB.valueOf(cli.getOptionValue("db").toUpperCase());
 
             run(configuration, resultingDB);
         } catch (ParseException e) {
@@ -81,6 +81,7 @@ public class Application {
                     .filter(flight -> flightValidator.isValid(flight));
 
             dumper.dumpStream(stream);
+            dumper.dumpAircrafts(aircraftDataProvider);
 
             System.out.println(dumper.count());
             System.out.println(dumper.countReal());

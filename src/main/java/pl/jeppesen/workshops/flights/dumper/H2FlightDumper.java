@@ -3,6 +3,7 @@ package pl.jeppesen.workshops.flights.dumper;
 import com.zaxxer.hikari.HikariDataSource;
 import org.h2.api.ErrorCode;
 import org.h2.jdbc.JdbcSQLException;
+import pl.jeppesen.workshops.flights.aircraft.data.AircraftDataProvider;
 import pl.jeppesen.workshops.flights.flight.Flight;
 
 import java.io.IOException;
@@ -53,5 +54,10 @@ public class H2FlightDumper extends AbstractFlightDumper {
     @Override
     PreparedStatement getInsertStatement(Connection conn) throws SQLException {
         return conn.prepareStatement("MERGE INTO flight KEY(date, id, airline) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    }
+
+    @Override
+    public void dumpAircrafts(AircraftDataProvider aircraftDataProvider) {
+        throw new RuntimeException("NOT IMPLEMENTED");
     }
 }

@@ -9,6 +9,8 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.Optional;
 
 /**
@@ -20,6 +22,11 @@ public class SqliteAircraftDataProvider implements AircraftDataProvider {
     private final HikariDataSource dataSource;
     private DateTimeFormatter dmyFormatter = DateTimeFormatter.ofPattern("dd-MM-yy");
     private DateTimeFormatter myFormatter = DateTimeFormatter.ofPattern("MM-yy");
+
+    private DateTimeFormatter customFormatter = new DateTimeFormatterBuilder()
+            .appendPattern("dd-MM-")
+            .appendValueReduced(ChronoField.YEAR_OF_ERA, 2, 2, LocalDate.now().minusYears(80))
+            .toFormatter();
 
     public SqliteAircraftDataProvider(String databaseFile) {
         try {
@@ -34,8 +41,7 @@ public class SqliteAircraftDataProvider implements AircraftDataProvider {
     @Override
     public  Aircraft getAircraftIfExists(String id) throws AircraftNotFoundException {
 
-        try (Connection connection = dataSource.getConnection()){
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM aircraft WHERE id = ?");
+        try (Connection connection = dataSource.getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM aircraft WHERE id = ?")){
             statement.setString(1, id);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -65,11 +71,10 @@ public class SqliteAircraftDataProvider implements AircraftDataProvider {
     }
 
     private LocalDate parseDate(String dateField) {
-        switch (dateField.length()) {
-            case 8: return LocalDate.parse(dateField, dmyFormatter);
-            case 5: return YearMonth.parse(dateField, myFormatter).atDay(1);
-            default: return null;
+        if (dateField.length() == 5) {
+            dateField = "01-" + dateField;
         }
+        return LocalDate.parse(dateField, customFormatter);
     }
 
     @Override

@@ -43,7 +43,6 @@ public class AircraftCounter implements  Runnable {
     public static void main(String[] args) throws InterruptedException {
 
         Configuration configuration = new Configuration("src/main/resources/configuration.xml");
-        CsvFlightDataProvider flightDataProvider = new CsvFlightDataProvider(configuration.getFlightsCsvPath());
 
         Set<String> aircrafts = Sets.newConcurrentHashSet();
 

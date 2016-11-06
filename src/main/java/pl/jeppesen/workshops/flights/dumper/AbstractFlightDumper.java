@@ -2,11 +2,16 @@ package pl.jeppesen.workshops.flights.dumper;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.ArrayHandler;
+import org.apache.commons.dbutils.handlers.ArrayListHandler;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
+import pl.jeppesen.workshops.flights.aircraft.Aircraft;
+import pl.jeppesen.workshops.flights.aircraft.data.AircraftDataProvider;
 import pl.jeppesen.workshops.flights.flight.Flight;
 
 import java.io.IOException;
 import java.sql.*;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Stream;

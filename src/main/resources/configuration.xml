@@ -15,9 +15,48 @@
             ./data/dumper/sqlite.db
         </sqlite>
     </output>
+    <reports>
+        <report>
+            <name>airport_usage</name>
+            <sql>select airport, count(*) from
+                (select `to` as airport from flight union all select `from` from flight) airports
+                group by airport
+                having airport in ("BZG", "GDN", "KTW", "KRK", "LCJ", "LUZ", "SZY", "POZ", "RDO", "RZE", "SZZ", "WAW", "WMI", "WRO", "IEG")
+                order by count(*) desc;</sql>
+        </report>
+        <report>
+            <name>ten_longest_flights_to_poland_from_airports</name>
+            <sql>
+                select `from` as airport, count(*) as nb_of_flights, avg(sta-std)/1000/3600 as duration
+                from flight group by `from` order by duration desc limit 10;
+            </sql>
+        </report>
+        <report>
+            <name>aircrafts_types_popularity</name>
+            <sql>
+                select aircraft.name, count(*) as flights from flight
+                join aircraft on aircraft.id = aircraft_id
+                group by name order by flights desc;
+            </sql>
+        </report>
+        <report>
+            <name>top_100_utilized_aircrafts_with_age</name>
+            <sql>
+                select aircraft_id, name, count(*) as flights,
+                  date(datetime(first_flight/1000, 'unixepoch')) as first_flight
+                from flight join aircraft on aircraft_id == aircraft.id
+                group by aircraft_id order by flights desc limit 100;
+            </sql>
+        </report>
+        <report>
+            <name>flights to barcelona by month</name>
+            <sql>select strftime('%Y-%m', datetime(sta/1000, 'unixepoch')) as month, count(*)
+                from flight where `to` = 'BCN' group by month order by month;</sql>
+        </report>
+    </reports>
     <validation>
         <dateRange>
-            <from>2015-10-01</from>
+            <from>2015-11-01</from>
             <to>2016-09-30</to>
         </dateRange>
         <airports>
