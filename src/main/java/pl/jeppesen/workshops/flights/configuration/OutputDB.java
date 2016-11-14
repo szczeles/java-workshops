@@ -24,4 +24,8 @@ public enum OutputDB {
                 .newInstance(configuration.getOutputPath(xmlDbLocation));
     }
 
+    public String getJdbcUri(Configuration configuration) {
+        return "jdbc:" + name().toLowerCase() + ":" + configuration.getOutputPath(xmlDbLocation);
+    }
+
 }

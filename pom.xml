@@ -32,7 +32,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>pl.jeppesen.workshops.flights.Application</mainClass>
+                            <mainClass>pl.jeppesen.workshops.flights.DataMerger</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

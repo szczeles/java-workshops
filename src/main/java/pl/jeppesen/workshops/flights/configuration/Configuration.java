@@ -1,5 +1,6 @@
 package pl.jeppesen.workshops.flights.configuration;
 
+import com.google.common.collect.Maps;
 import org.joox.Context;
 import org.joox.Mapper;
 import org.joox.Match;
@@ -7,7 +8,9 @@ import org.xml.sax.SAXException;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.joox.JOOX.$;
 
@@ -46,5 +49,19 @@ public class Configuration {
     public String getOutputPath(String xpath) {
         return document.xpath(xpath).text().trim();
     }
+
+    public Map<String, String> getReports() {
+        HashMap<String, String> reports = Maps.newHashMap();
+        document.xpath("/etl/reports/report").forEach(xml ->
+                {
+                    reports.put(
+                            xml.getElementsByTagName("name").item(0).getTextContent(),
+                            xml.getElementsByTagName("sql").item(0).getTextContent()
+                    );
+                }
+        );
+        return reports;
+    }
+
 
 }

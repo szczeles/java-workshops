@@ -9,6 +9,7 @@ import org.mapdb.DBMaker;
 import org.slf4j.Logger;
 import pl.jeppesen.workshops.flights.aircraft.data.AircraftDataProvider;
 import pl.jeppesen.workshops.flights.aircraft.data.SqliteAircraftDataProvider;
+import pl.jeppesen.workshops.flights.configuration.ArgumentParser;
 import pl.jeppesen.workshops.flights.configuration.Configuration;
 import pl.jeppesen.workshops.flights.configuration.OutputDB;
 import pl.jeppesen.workshops.flights.dumper.FlightDumper;
@@ -21,41 +22,21 @@ import java.util.concurrent.*;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-public class Application {
+/**
+ * Gets flights and aircrafts data, validates entries and saves result into sqlite/h2 database
+ */
+public class DataMerger {
 
     public static void main(String[] args) throws Exception {
-        Options options = getCliOptions();
-        CommandLineParser parser = new DefaultParser();
-        CommandLine cli;
-
+        ArgumentParser parser = new ArgumentParser("data-merger", args);
         try {
-            cli = parser.parse(options, args);
-
-            if (cli.hasOption("help")) {
-                printHelp(options);
-            }
-
-            Configuration configuration = new Configuration(cli.getOptionValue("config"));
-            OutputDB resultingDB = OutputDB.valueOf(cli.getOptionValue("db").toUpperCase());
-
-            run(configuration, resultingDB);
-        } catch (ParseException e) {
-            printHelp(options);
+            parser.parse();
+        } catch (ArgumentParser.ArgumentsInvalid e) {
+            parser.printHelp(e.getMessage());
+            return;
         }
-    }
 
-    private static void printHelp(Options options) {
-        new HelpFormatter().printHelp("flights-etl", options);
-        System.exit(0);
-    }
-
-    @NotNull
-    private static Options getCliOptions() {
-        Options options = new Options();
-        options.addOption("d", "db", true, "resulting database, h2 or sqlite");
-        options.addOption("c", "config", true, "configuration xml location");
-        options.addOption("h", "help", false, "print help message");
-        return options;
+        run(new Configuration(parser.getConfig()), parser.getDb());
     }
 
     private static void run(Configuration configuration, OutputDB resultingDB) throws Exception {

@@ -1,17 +1,11 @@
 package pl.jeppesen.workshops.flights.testing;
 
 import com.google.common.base.Stopwatch;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import pl.jeppesen.workshops.flights.Application;
-import pl.jeppesen.workshops.flights.aircraft.data.AircraftDataProvider;
-import pl.jeppesen.workshops.flights.aircraft.data.SqliteAircraftDataProvider;
 import pl.jeppesen.workshops.flights.configuration.Configuration;
 import pl.jeppesen.workshops.flights.flight.Flight;
 import pl.jeppesen.workshops.flights.flight.dataprovider.CsvFlightDataProvider;
-import pl.jeppesen.workshops.flights.flight.validator.*;
 
-import java.util.HashSet;
 import java.util.Set;
 
 /**
