@@ -1,6 +1,7 @@
 package pl.jeppesen.workshops.flights.testing;
 
 import com.google.common.base.Stopwatch;
+
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveTask;
 

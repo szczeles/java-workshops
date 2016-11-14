@@ -1,12 +1,7 @@
 package pl.jeppesen.workshops.flights.flight;
 
-import com.opencsv.bean.CsvBindByName;
-import com.opencsv.bean.CsvDate;
-
-import javax.annotation.*;
-import javax.annotation.meta.TypeQualifier;
-import javax.annotation.meta.TypeQualifierDefault;
-import javax.annotation.meta.TypeQualifierNickname;
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;

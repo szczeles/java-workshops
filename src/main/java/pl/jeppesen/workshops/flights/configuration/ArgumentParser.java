@@ -1,7 +1,6 @@
 package pl.jeppesen.workshops.flights.configuration;
 
 import org.apache.commons.cli.*;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 

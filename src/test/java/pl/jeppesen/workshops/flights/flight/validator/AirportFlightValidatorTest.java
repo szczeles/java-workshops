@@ -4,7 +4,8 @@ import com.beust.jcommander.internal.Lists;
 import org.testng.annotations.Test;
 import pl.jeppesen.workshops.flights.flight.Flight;
 
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
 /**
  * Created by mariusz.strzelecki on 01.11.16.

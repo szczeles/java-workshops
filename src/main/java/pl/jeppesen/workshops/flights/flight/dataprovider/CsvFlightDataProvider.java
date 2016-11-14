@@ -5,7 +5,8 @@ import com.google.common.collect.Iterators;
 import com.opencsv.CSVIterator;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
-import com.opencsv.bean.*;
+import com.opencsv.bean.ColumnPositionMappingStrategy;
+import com.opencsv.bean.CsvToBean;
 import com.opencsv.enums.CSVReaderNullFieldIndicator;
 import pl.jeppesen.workshops.flights.flight.Flight;
 

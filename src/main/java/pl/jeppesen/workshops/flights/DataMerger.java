@@ -2,23 +2,18 @@ package pl.jeppesen.workshops.flights;
 
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
-import org.apache.commons.cli.*;
-import org.jetbrains.annotations.NotNull;
 import org.mapdb.DB;
 import org.mapdb.DBMaker;
-import org.slf4j.Logger;
 import pl.jeppesen.workshops.flights.aircraft.data.AircraftDataProvider;
 import pl.jeppesen.workshops.flights.aircraft.data.SqliteAircraftDataProvider;
 import pl.jeppesen.workshops.flights.configuration.ArgumentParser;
 import pl.jeppesen.workshops.flights.configuration.Configuration;
 import pl.jeppesen.workshops.flights.configuration.OutputDB;
 import pl.jeppesen.workshops.flights.dumper.FlightDumper;
-import pl.jeppesen.workshops.flights.dumper.H2FlightDumper;
 import pl.jeppesen.workshops.flights.flight.Flight;
 import pl.jeppesen.workshops.flights.flight.dataprovider.CsvFlightDataProvider;
 import pl.jeppesen.workshops.flights.flight.validator.*;
 
-import java.util.concurrent.*;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 

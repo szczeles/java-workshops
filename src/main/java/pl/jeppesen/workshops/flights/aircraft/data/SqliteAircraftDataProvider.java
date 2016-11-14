@@ -5,9 +5,11 @@ import pl.jeppesen.workshops.flights.aircraft.Aircraft;
 import pl.jeppesen.workshops.flights.aircraft.JetAircraft;
 import pl.jeppesen.workshops.flights.aircraft.TurbopropAircraft;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;

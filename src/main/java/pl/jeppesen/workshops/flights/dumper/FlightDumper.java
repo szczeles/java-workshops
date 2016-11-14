@@ -3,7 +3,6 @@ package pl.jeppesen.workshops.flights.dumper;
 import pl.jeppesen.workshops.flights.aircraft.data.AircraftDataProvider;
 import pl.jeppesen.workshops.flights.flight.Flight;
 
-import java.io.Closeable;
 import java.util.stream.Stream;
 
 /**

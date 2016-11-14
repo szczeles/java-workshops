@@ -2,7 +2,6 @@ package pl.jeppesen.workshops.flights.testing;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 public class DateExamples {
     public static void main(String[] args) {

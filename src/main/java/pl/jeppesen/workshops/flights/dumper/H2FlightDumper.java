@@ -1,13 +1,13 @@
 package pl.jeppesen.workshops.flights.dumper;
 
-import com.zaxxer.hikari.HikariDataSource;
 import org.h2.api.ErrorCode;
 import org.h2.jdbc.JdbcSQLException;
 import pl.jeppesen.workshops.flights.aircraft.data.AircraftDataProvider;
-import pl.jeppesen.workshops.flights.flight.Flight;
 
-import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * Created by mariusz.strzelecki on 04.11.16.

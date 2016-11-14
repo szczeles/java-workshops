@@ -3,3 +3,4 @@ target/
 *iml
 .~*
 data/dumper
+dependency-reduced-pom.xml

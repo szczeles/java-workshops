@@ -6,7 +6,7 @@ import pl.jeppesen.workshops.flights.flight.Flight;
 
 import java.time.LocalDate;
 
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
 
 public class ValidIdFlightValidatorTest {
 

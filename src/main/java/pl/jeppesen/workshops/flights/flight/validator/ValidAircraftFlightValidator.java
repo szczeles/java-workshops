@@ -1,16 +1,11 @@
 package pl.jeppesen.workshops.flights.flight.validator;
 
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-import org.mapdb.BTreeMap;
 import org.mapdb.DB;
-import org.mapdb.DBMaker;
 import org.mapdb.Serializer;
 import pl.jeppesen.workshops.flights.aircraft.data.AircraftDataProvider;
 import pl.jeppesen.workshops.flights.flight.Flight;
 
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by mariusz.strzelecki on 02.11.16.

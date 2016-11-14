@@ -5,7 +5,8 @@ import pl.jeppesen.workshops.flights.flight.Flight;
 
 import java.util.ArrayList;
 
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
 public class OverallFlightValidatorTest {
 

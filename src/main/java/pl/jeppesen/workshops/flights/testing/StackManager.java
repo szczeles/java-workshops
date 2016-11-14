@@ -3,7 +3,6 @@ package pl.jeppesen.workshops.flights.testing;
 import com.google.common.base.Stopwatch;
 
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Created by mariusz.strzelecki on 03.11.16.

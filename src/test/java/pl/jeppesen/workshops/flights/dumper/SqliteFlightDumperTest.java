@@ -3,19 +3,16 @@ package pl.jeppesen.workshops.flights.dumper;
 import com.beust.jcommander.internal.Lists;
 import com.zaxxer.hikari.HikariDataSource;
 import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
 import org.testng.annotations.Test;
 import pl.jeppesen.workshops.flights.flight.Flight;
 
-import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.stream.Stream;
 
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
 
 /**
  * Created by mariusz.strzelecki on 04.11.16.

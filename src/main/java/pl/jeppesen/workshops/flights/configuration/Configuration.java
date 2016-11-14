@@ -1,8 +1,6 @@
 package pl.jeppesen.workshops.flights.configuration;
 
 import com.google.common.collect.Maps;
-import org.joox.Context;
-import org.joox.Mapper;
 import org.joox.Match;
 import org.xml.sax.SAXException;
 
